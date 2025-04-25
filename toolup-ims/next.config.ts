@@ -1,9 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig: import('next').NextConfig = {
-  reactStrictMode: true,
-  images: {
-    domains: ['drive.google.com', 'lh3.googleusercontent.com'],
+// next.config.js
+module.exports = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb', // Adjust according to your needs
+    },
   },
-}
-
-module.exports = nextConfig
+};
