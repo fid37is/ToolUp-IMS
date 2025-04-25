@@ -1,7 +1,15 @@
 // pages/api/sales/index.js
 import { google } from 'googleapis';
 import { v4 as uuidv4 } from 'uuid';
-import { updateItem } from '../../../utils/inventoryService';
+import { updateItem } from '../../../src/utils/inventoryService';
+
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '2mb', // Adjust based on typical payload size
+        },
+    },
+};
 
 const SHEET_ID = process.env.GOOGLE_SHEET_ID;
 const SHEET_RANGE = 'Sales!A:G';

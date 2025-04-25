@@ -1,11 +1,11 @@
 "use client"
 import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
-import InventoryList from '../components/InventoryList';
-import AddItemModal from '../components/AddItemModal';
-import Statistics from '../components/Statistics';
-import SearchBar from '../components/SearchBar';
-import { getAllItems, saveItem, updateItem, deleteItem } from '../utils/inventoryService';
+import InventoryList from '../src/components/InventoryList';
+import AddItemModal from '../src/components/AddItemModal';
+import Statistics from '../src/components/Statistics';
+import SearchBar from '../src/components/SearchBar';
+import { getAllItems, saveItem, updateItem, deleteItem } from '../src/utils/inventoryService';
 
 export default function Home() {
     const [items, setItems] = useState([]);

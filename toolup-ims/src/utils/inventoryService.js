@@ -1,5 +1,5 @@
 // utils/inventoryService.js
-const API_URL = '/api/inventory';
+const API_URL = '/api/items';
 
 export async function getAllItems() {
     const response = await fetch(API_URL);
@@ -24,7 +24,7 @@ export async function saveItem(item) {
 }
 
 export async function updateItem(item) {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}/${item.id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -38,11 +38,18 @@ export async function updateItem(item) {
 }
 
 export async function deleteItem(id) {
-    const response = await fetch(`${API_URL}?id=${id}`, {
+    const response = await fetch(`${API_URL}/${id}`, {
         method: 'DELETE',
     });
     if (!response.ok) {
         throw new Error('Failed to delete item');
     }
     return response.json();
+}
+
+export async function getLowStockItems() {
+    const items = await getAllItems();
+    return items.filter(item => 
+        item.quantity <= (item.lowStockThreshold || 5)
+    );
 }
