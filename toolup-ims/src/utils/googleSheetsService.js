@@ -80,7 +80,7 @@ export async function saveItemToSheet(item) {
         const rowData = headers.map(header => itemWithId[header] || '');
         
         // Append the new item
-        await sheets.spreadsheets.values.append({
+        sheets.spreadsheets.values.append({
             spreadsheetId: SHEET_ID,
             range: ITEMS_RANGE,
             valueInputOption: 'USER_ENTERED',
@@ -120,7 +120,7 @@ export async function updateItemInSheet(item) {
         const rowData = headers.map(header => item[header] !== undefined ? item[header] : '');
         
         // Update the item
-        await sheets.spreadsheets.values.update({
+        sheets.spreadsheets.values.update({
             spreadsheetId: SHEET_ID,
             range: `${ITEMS_RANGE.split('!')[0]}!${rowIndex + 1}`,
             valueInputOption: 'USER_ENTERED',

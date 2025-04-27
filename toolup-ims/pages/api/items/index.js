@@ -1,20 +1,5 @@
 // pages/api/items/index.js
-import { getAllItemsFromSheet, saveItemToSheet } from '../../../utils/googleSheetsService';
-
-export default async function handler(req, res) {
-    console.log('API endpoint called with method:', req.method);
-    
-    try {
-        // Rest of your handler code...
-    } catch (error) {
-        console.error('API error details:', error);
-        console.error('Stack trace:', error.stack);
-        return res.status(500).json({ 
-            message: error.message,
-            details: error.stack
-        });
-    }
-}
+import { getAllItemsFromSheet, saveItemToSheet } from "../../../src/utils/googleSheetsService";
 
 export default async function handler(req, res) {
     try {

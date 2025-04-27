@@ -36,16 +36,17 @@ export default function AddItemModal({ isOpen, onClose, onSave }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         try {
             let imageUrl = '';
-
+    
             if (formData.imageFile) {
                 setIsUploading(true);
+                // This will now call our API route instead of directly using Google APIs
                 imageUrl = await uploadImage(formData.imageFile);
                 setIsUploading(false);
             }
-
+    
             const newItem = {
                 name: formData.name,
                 category: formData.category,
@@ -56,7 +57,7 @@ export default function AddItemModal({ isOpen, onClose, onSave }) {
                 lowStockThreshold: parseInt(formData.lowStockThreshold),
                 imageUrl
             };
-
+    
             onSave(newItem);
             setFormData(initialState);
         } catch (error) {
