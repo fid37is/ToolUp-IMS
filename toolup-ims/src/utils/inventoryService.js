@@ -2,11 +2,18 @@
 const API_URL = '/api/items';
 
 export async function getAllItems() {
-    const response = await fetch(API_URL);
-    if (!response.ok) {
-        throw new Error('Failed to fetch items');
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`API Error (${response.status}): ${errorText}`);
+            throw new Error(`Failed to fetch items: ${response.status}`);
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
     }
-    return response.json();
 }
 
 export async function saveItem(item) {

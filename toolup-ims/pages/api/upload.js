@@ -2,6 +2,7 @@
 import { google } from 'googleapis';
 import formidable from 'formidable';
 import fs from 'fs';
+import path from 'path';
 
 // Disable the default body parser to handle form data
 export const config = {
@@ -16,7 +17,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Parse form with formidable
+        // Parse form with formidable - FIXED
         const form = new formidable.IncomingForm();
         const { files } = await new Promise((resolve, reject) => {
             form.parse(req, (err, fields, files) => {
@@ -25,10 +26,17 @@ export default async function handler(req, res) {
             });
         });
 
-        // Upload to Google Drive
+        // Make sure file exists
+        if (!files.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        // Inside your handler:
+        const keyPath = path.join(process.cwd(), process.env.GOOGLE_APPLICATION_CREDENTIALS);
+
         const auth = new google.auth.GoogleAuth({
-            keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-            scopes: ['https://www.googleapis.com/auth/drive']
+            keyFile: keyPath,
+            scopes: ['https://www.googleapis.com/auth/drive'],
         });
 
         const drive = google.drive({ version: 'v3', auth });

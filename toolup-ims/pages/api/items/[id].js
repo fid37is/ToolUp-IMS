@@ -1,5 +1,5 @@
 // pages/api/items/[id].js
-import { updateItemInSheet, deleteItemFromSheet } from '../../../utils/googleSheetsService';
+import { updateItemInSheet, deleteItemFromSheet } from '../../../src/utils/googleSheetsService';
 
 export default async function handler(req, res) {
     const { id } = req.query;
