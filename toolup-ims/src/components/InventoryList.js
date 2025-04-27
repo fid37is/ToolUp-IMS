@@ -75,8 +75,8 @@ export default function InventoryList({ items, onUpdateItem, onSellItem, onDelet
                                                     src={item.imageUrl}
                                                     alt={item.name}
                                                     layout="fill"
-                                                    objectFit="cover"
                                                     className="rounded-md"
+                                                    sizes="(max-width: 768px) 100vw, 50vw"
                                                 />
                                             </div>
                                         ) : (

@@ -17,19 +17,42 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Parse form with formidable - FIXED
-        const form = new formidable.IncomingForm();
-        const { files } = await new Promise((resolve, reject) => {
+        // Create a new formidable form
+        const form = formidable({
+            keepExtensions: true,
+            maxFileSize: 10 * 1024 * 1024, // 10MB limit
+        });
+
+        // Parse the form
+        const [fields, files] = await new Promise((resolve, reject) => {
             form.parse(req, (err, fields, files) => {
-                if (err) reject(err);
-                resolve({ fields, files });
+                if (err) return reject(err);
+                resolve([fields, files]);
             });
         });
 
-        // Make sure file exists
-        if (!files.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
+        // Log what we received to help diagnose issues
+        console.log('Form fields received:', Object.keys(fields));
+        console.log('Files received:', Object.keys(files));
+        
+        // Get the uploaded file - look for 'image' field name to match the client-side
+        const file = files.image ? 
+            (Array.isArray(files.image) ? files.image[0] : files.image) : null;
+
+        if (!file) {
+            return res.status(400).json({ 
+                message: 'No file uploaded', 
+                receivedFields: Object.keys(fields),
+                receivedFiles: Object.keys(files)
+            });
         }
+
+        console.log('File details:', {
+            name: file.originalFilename,
+            type: file.mimetype,
+            size: file.size,
+            path: file.filepath
+        });
 
         // Inside your handler:
         const keyPath = path.join(process.cwd(), process.env.GOOGLE_APPLICATION_CREDENTIALS);
@@ -42,13 +65,13 @@ export default async function handler(req, res) {
         const drive = google.drive({ version: 'v3', auth });
 
         const fileMetadata = {
-            name: files.file.originalFilename || 'uploaded-image',
+            name: file.originalFilename || 'uploaded-image',
             parents: [process.env.GOOGLE_DRIVE_FOLDER_ID] // Add your folder ID
         };
 
         const media = {
-            mimeType: files.file.mimetype,
-            body: fs.createReadStream(files.file.filepath)
+            mimeType: file.mimetype,
+            body: fs.createReadStream(file.filepath)
         };
 
         const driveResponse = await drive.files.create({
@@ -68,6 +91,13 @@ export default async function handler(req, res) {
 
         // Get the actual download URL
         const imageUrl = `https://drive.google.com/uc?export=view&id=${driveResponse.data.id}`;
+
+        // Clean up the temporary file
+        try {
+            fs.unlinkSync(file.filepath);
+        } catch (e) {
+            console.error('Error removing temp file:', e);
+        }
 
         res.status(200).json({
             success: true,

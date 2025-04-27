@@ -20,11 +20,19 @@ export default function AddItemModal({ isOpen, onClose, onSave }) {
 
     const handleChange = (e) => {
         const { name, value, type } = e.target;
-
+    
         if (type === 'file') {
+            const file = e.target.files[0] || null;
+            console.log("File selected:", file);
+            console.log("File details:", file ? {
+                name: file.name,
+                type: file.type,
+                size: file.size
+            } : "No file");
+            
             setFormData({
                 ...formData,
-                imageFile: e.target.files[0]
+                imageFile: file
             });
         } else {
             setFormData({

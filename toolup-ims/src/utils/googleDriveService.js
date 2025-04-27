@@ -1,23 +1,25 @@
-// utils/googleDriveService.js (client-side version)
-export async function uploadImage(file) {
-    try {
-        const formData = new FormData();
-        formData.append('file', file);
+// src/utils/googleDriveService.js
 
-        const response = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData,
-        });
-
-        if (!response.ok) {
-            const error = await response.text();
-            throw new Error(`Upload failed: ${error}`);
-        }
-
-        const data = await response.json();
-        return data.imageUrl;
-    } catch (error) {
-        console.error('Error uploading image:', error);
-        throw error;
+export const uploadImage = async (file) => {
+    if (!file) {
+        throw new Error("No file provided");
     }
-}
+
+    console.log("Uploading file:", file.name, "size:", file.size); // Debug logging
+
+    const formData = new FormData();
+    formData.append('image', file); // This name must match what the server expects
+
+    const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Upload failed: ${JSON.stringify(errorData)}`);
+    }
+
+    const data = await response.json();
+    return data.imageUrl;
+};
