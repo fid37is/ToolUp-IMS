@@ -151,7 +151,7 @@ export default function Home() {
             <main className="container mx-auto px-4 py-6">
                 <header className="mb-8">
                     <div className="flex justify-between items-center">
-                        <h1 className="text-3xl font-bold text-gray-800">Tool Up <span className="text-blue-500">Inventory</span></h1>
+                        <h1 className="text-2xl font-bold text-gray-800">Tool Up <span className="text-blue-500">Inventory</span></h1>
                         <button
                             onClick={() => setIsModalOpen(true)}
                             className="flex items-center justify-center gap-2 btn-primary bg-[#2d314]"
