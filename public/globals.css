@@ -1,4 +1,4 @@
-@tailwind base;
+
 @tailwind components;
 @tailwind utilities;
 
@@ -27,3 +27,22 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+/* Increase specificity for utility classes */
+html body .text-2xl {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+}
+
+/* Force button colors */
+html body .bg-slate-900,
+html body .bg-primary {
+  background-color: #2D3142 !important;
+}
+
+html body .hover\:bg-slate-800:hover,
+html body .hover\:bg-primary-hover:hover {
+  background-color: #3A4056 !important;
+}
+
+/* Add your other important overrides here */

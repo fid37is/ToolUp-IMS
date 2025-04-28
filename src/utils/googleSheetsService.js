@@ -147,6 +147,7 @@ export async function deleteItemFromSheet(id) {
         });
         
         const rows = response.data.values || [];
+        const headers = rows[0] || []; // Get headers from the first row
         const rowIndex = rows.findIndex((row, index) => 
             index > 0 && row[0] === id
         );

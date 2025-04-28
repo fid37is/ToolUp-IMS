@@ -10,7 +10,8 @@ export default async function handler(req, res) {
             const result = await updateItemInSheet({ ...updatedItem, id });
             return res.status(200).json(result);
         } else if (req.method === 'DELETE') {
-            const result = await deleteItemFromSheet(id);
+            // Pass req.headers if deleteItemFromSheet needs headers
+            const result = await deleteItemFromSheet(id, req.headers);
             return res.status(200).json(result);
         }
 

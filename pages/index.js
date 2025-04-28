@@ -8,6 +8,9 @@ import AlertModal from '../src/components/AlertModal';
 import Statistics from '../src/components/Statistics';
 import SearchBar from '../src/components/SearchBar';
 import { getAllItems, saveItem, updateItem, deleteItem } from '../src/utils/inventoryService';
+import { Plus } from 'lucide-react';
+
+
 
 export default function Home() {
     const [items, setItems] = useState([]);
@@ -20,11 +23,11 @@ export default function Home() {
         lowStockItems: 0
     });
     const [loading, setLoading] = useState(true);
-    
+
     // State for delete confirmation modal
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
-    
+
     // State for alert modal
     const [alertModalOpen, setAlertModalOpen] = useState(false);
     const [alertInfo, setAlertInfo] = useState({ title: '', message: '' });
@@ -34,7 +37,7 @@ export default function Home() {
         setAlertInfo({ title, message });
         setAlertModalOpen(true);
     }, []);
-    
+
     // Memoize the loadInventory function with useCallback
     const loadInventory = useCallback(async () => {
         try {
@@ -48,7 +51,7 @@ export default function Home() {
             setLoading(false);
         }
     }, [showAlert]);
-    
+
     // Now add loadInventory to the useEffect dependency array
     useEffect(() => {
         loadInventory();
@@ -118,7 +121,7 @@ export default function Home() {
     // Function to execute the delete operation
     const executeDelete = async () => {
         if (!itemToDelete) return;
-        
+
         try {
             await deleteItem(itemToDelete);
             setItems(items.filter(item => item.id !== itemToDelete));
@@ -151,10 +154,14 @@ export default function Home() {
                         <h1 className="text-3xl font-bold text-gray-800">Tool Up <span className="text-blue-500">Inventory</span></h1>
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors"
+                            className="flex items-center justify-center gap-2 btn-primary bg-[#2d314]"
                         >
-                            Add New Item
+                            <Plus className="w-5 h-5" />
+                            <span>New Item</span>
                         </button>
+
+
+
                     </div>
                     <p className="text-gray-600 mt-1">close to you!</p>
                 </header>
@@ -183,7 +190,7 @@ export default function Home() {
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleAddItem}
             />
-            
+
             {/* Delete Confirmation Modal */}
             <DeleteConfirmationModal
                 isOpen={deleteModalOpen}
@@ -191,7 +198,7 @@ export default function Home() {
                 onConfirm={executeDelete}
                 itemId={itemToDelete}
             />
-            
+
             {/* Alert Modal */}
             <AlertModal
                 isOpen={alertModalOpen}
